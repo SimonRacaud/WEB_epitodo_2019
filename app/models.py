@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T18:47:01+01:00
+# @Last modified time: 2020-03-18T19:14:05+01:00
 
 from .DataBase import DataBase
 
@@ -14,7 +14,7 @@ class User_modele:
     def get_info(self):
         query = "SELECT user_id, username, password, logged FROM user WHERE username=%s"
         result = self.db.query(query, ["simon"], True)
-        return result
+        return result[0]
 
     def signin(self):
         pass

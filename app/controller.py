@@ -2,8 +2,10 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T18:48:06+01:00
+# @Last modified time: 2020-03-18T19:23:52+01:00
 
+from flask import render_template
+from flask import jsonify
 
 from app import models
 from .models import User_modele
@@ -31,18 +33,21 @@ class Task_controller:
 class User_controller:
 
     def __init__(self):
-        self.modele = User_modele()
-        #self.session = Session(self.modele)
+        self.usr_modele = User_modele()
+        self.session = Session(self.usr_modele)
 
     def get_information(self):
-        data = self.modele.get_info()
-        print(data)
-        return "Get list of user informations\n"
+        data = self.usr_modele.get_info()
+        #data["key1"] = data.pop("user_id")
+        #data["key2"] = data.pop("username")
+        #data["key3"] = data.pop("password")
+        #data["key4"] = data.pop("logged")
+        return jsonify(result = data);
 
 class Session:
 
-    def __init__(self):
-        pass
+    def __init__(self, modele):
+        self.usr_modele = modele
 
     def is_logged(self):
         pass

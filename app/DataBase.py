@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T18:49:13+01:00
+# @Last modified time: 2020-03-18T19:13:31+01:00
 
 import pymysql as sql
 
@@ -39,7 +39,8 @@ class DataBase:
             unix_socket = app.config["DATABASE_SOCK"],
             user        = app.config["DATABASE_USER"],
             passwd      = app.config["DATABASE_PASS"],
-            db          = app.config["DATABASE_NAME"])
+            db          = app.config["DATABASE_NAME"],
+            cursorclass = sql.cursors.DictCursor)
 
     def disconnect(self):
         if not hasattr(self, 'db'):
