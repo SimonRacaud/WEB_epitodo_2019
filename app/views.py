@@ -1,36 +1,63 @@
-from flask import render_template
+# @Author: simon
+# @Date:   2020-03-18T13:40:03+01:00
+# @Project: WEB_epytodo_2019
+# @Last modified by:   simon
+# @Last modified time: 2020-03-18T18:47:58+01:00
+
 from app import app
-from flask import jsonify
-import pymysql as sql
+from app import controller
+from .controller import User_controller
 
-@app.route('/', methods =['GET'])
-
-@app.route('/index', methods =['GET'])
+"""
+    INDEX
+"""
+@app.route('/', methods = ['GET'])
+@app.route('/index', methods = ['GET'])
 def route_index():
-    return render_template("index2.html", title="TEST", content="Content")
-
-@app.route('/user/<username>', methods =['POST'])
-def route_add_user(username):
-    return "User added!\n"
+    """ Home page """
+    #render_template("index2.html", title="TEST", content="Content")
+    return "Home page (TEMP DEBUG)\n"
 
 """
-@app.route(’/user’)
-def route_all_users():
-    result = ""
-    try:
-        ## We’re  creating  connection  between  our  mysql  server  and our  app
-        connect = sql.connect(host='localhost', unix_socket='path_to_our_mysql_socket', user='_user', passwd='_password', db='epitodo')
-        ## We’re  retrieving a "pointer" aka "cursor" to our  database
-        cursor = connect.cursor ()
-        ## We’re  executing a SQL  command ,
-        ## assuming  that  all  tables  are  already  created
-        cursor.execute("SELECT * from  user")
-        ## We’re  retrieving  all  results
-        result = cursor.fetchall()
-        ## We’re  closing  our  cursor  and our  connection
-        cursor.close()
-        connect.close()
-    except  Exception  as e :
-        print("Caught  an  exception : ", e)
-        ## We’re  sending  the  datareturn  jsonify(result)
+    USER
 """
+@app.route('/register', methods = ['POST'])
+def route_user_register():
+    #username = request.form['key1']
+    return "Register user\n"
+
+@app.route('/signin', methods = ['POST'])
+def route_user_signin():
+    return "Login user\n"
+
+@app.route('/signout', methods = ['POST'])
+def route_user_signout():
+    return "Logout user\n"
+
+@app.route('/user', methods = ['GET'])
+def route_user_information():
+    controller = User_controller()
+    return controller.get_information()
+
+"""
+    TASKs
+"""
+@app.route('/user/task', methods = ['GET'])
+def route_task_get_list():
+    return "Get list of all users\n"
+
+@app.route('/user/task/<id>', methods = ['GET'])
+def route_task_get(id):
+    return "Get specific task: id=[" + id + "]\n"
+
+@app.route('/user/task/<id>', methods = ['POST'])
+def route_task_update(id):
+    return "Update specific task: id=[" + id + "]\n"
+
+@app.route('/user/task/add', methods = ['POST'])
+def route_task_add():
+    return "Add a new task\n"
+
+@app.route('/user/task/del/<id>', methods = ['POST'])
+def route_task_remove(id):
+    return "Remove a task : id=[" + id + "]\n"
