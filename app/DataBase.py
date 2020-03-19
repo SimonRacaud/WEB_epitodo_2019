@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T19:13:31+01:00
+# @Last modified time: 2020-03-19T17:28:56+01:00
 
 import pymysql as sql
 
@@ -23,15 +23,20 @@ class DataBase:
             return -1;
         try:
             with self.db.cursor() as cursor:
-                cursor.execute(request, parameters)
+                nb = cursor.execute(request, parameters)
                 if get_result == True:
                     result = cursor.fetchall()
             if not get_result:
                 self.db.commit()
+                if nb != 0:
+                    return True
+                else:
+                    return False
             else:
                 return result
         except Exception:
             self.disconnect()
+            return None
 
     def connect(self):
         self.db = sql.connect(
