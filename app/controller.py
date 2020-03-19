@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-19T18:59:42+01:00
+# @Last modified time: 2020-03-19T19:04:11+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -39,10 +39,14 @@ class User_controller:
         self.usr_modele = User_modele()
 
     def get_information(self):
-        data = self.usr_modele.get_info()
-        data["key1"] = data.pop("username")
-        data["key2"] = data.pop("password")
-        return jsonify(result = data);
+        if self.is_logged():
+            username = self.session.get_username()
+            data = self.usr_modele.get_info(username)
+            data["key1"] = data.pop("username")
+            data["key2"] = data.pop("password")
+            return jsonify(result = data);
+        else:
+            return "Error: not logged"
 
     def signin(self, username, password):
         if self.is_logged():
