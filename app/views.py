@@ -2,11 +2,14 @@
 # @Date:   2020-03-18T13:40:03+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T18:47:58+01:00
+# @Last modified time: 2020-03-19T16:46:55+01:00
 
+from flask import request
 from app import app
 from app import controller
-from .controller import User_controller
+from .controller import AppController
+
+controller = AppController()
 
 """
     INDEX
@@ -15,28 +18,29 @@ from .controller import User_controller
 @app.route('/index', methods = ['GET'])
 def route_index():
     """ Home page """
-    #render_template("index2.html", title="TEST", content="Content")
-    return "Home page (TEMP DEBUG)\n"
+    return controller.get_home_page()
 
 """
     USER
 """
 @app.route('/register', methods = ['POST'])
 def route_user_register():
-    #username = request.form['key1']
-    return "Register user\n"
+    username = request.form['key1']
+    password = request.form['key2']
+    return controller.register(username, password)
 
 @app.route('/signin', methods = ['POST'])
 def route_user_signin():
-    return "Login user\n"
+    username = request.form['username']
+    password = request.form['password']
+    return controller.signin(username, password)
 
 @app.route('/signout', methods = ['POST'])
 def route_user_signout():
-    return "Logout user\n"
+    return controller.signout()
 
 @app.route('/user', methods = ['GET'])
 def route_user_information():
-    controller = User_controller()
     return controller.get_information()
 
 """

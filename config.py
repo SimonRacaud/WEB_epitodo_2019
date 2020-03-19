@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:34+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-18T12:23:13+01:00
+# @Last modified time: 2020-03-19T16:21:02+01:00
 
 DATABASE_NAME = "epytodo"
 
@@ -13,3 +13,6 @@ DATABASE_SOCK = "/run/mysqld/mysqld.sock"
 DATABASE_USER = "root"
 
 DATABASE_PASS = "root"
+
+SECRET_KEY = "I love cookies"
+SESSION_TYPE = "memcached"

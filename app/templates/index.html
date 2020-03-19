@@ -7,8 +7,21 @@
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </head>
 <body>
-  <div>
-    {{ content }}
- </div>
+    <form method="POST" action="/register">
+        <h3>Register form</h3>
+       <input type="text" name="key1" placeholder="username" />
+       <input type="text" name="key2" placeholder="password" />
+       <input type="submit" />
+    </form>
+    <form method="POST" action="/signin">
+        <h3>Signin form</h3>
+       <input type="text" name="username" placeholder="username" />
+       <input type="text" name="password" placeholder="password" />
+       <input type="submit" />
+    </form>
+    <form method="POST" action="/signout">
+     <h3>Signout form</h3>
+    <input type="submit" />
+    </form>
 </body>
 </html>
