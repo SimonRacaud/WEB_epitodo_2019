@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T14:48:07+01:00
+# @Last modified time: 2020-03-20T15:01:55+01:00
 
 class UserModele:
 

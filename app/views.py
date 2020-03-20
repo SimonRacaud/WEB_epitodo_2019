@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T13:40:03+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T12:01:15+01:00
+# @Last modified time: 2020-03-20T16:32:18+01:00
 
 from flask import request
 from app import app
@@ -48,7 +48,7 @@ def route_user_information():
 """
 @app.route('/user/task', methods = ['GET'])
 def route_task_get_list():
-    return "Get list of all users\n"
+    return controller.get_all_task()
 
 @app.route('/user/task/<id>', methods = ['GET'])
 def route_task_get(id):
