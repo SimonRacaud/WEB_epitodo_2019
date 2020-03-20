@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T14:53:28+01:00
+# @Last modified time: 2020-03-20T17:53:41+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -16,6 +16,12 @@ from .models import AppModele
 
 from .TaskController import TaskController
 from .UserController import UserController
+
+def is_id_in_tasks_id(id, array):
+    for task_id in array:
+        if int(id) == int(task_id['fk_task_id']):
+            return True
+    return False
 
 class AppController(TaskController, UserController):
     """

@@ -2,9 +2,11 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T17:06:30+01:00
+# @Last modified time: 2020-03-20T17:53:22+01:00
 
 from .DataBase import DataBase
+
+from app import controller
 
 class TaskModele:
 
@@ -28,10 +30,9 @@ class TaskModele:
     def __get_task_width_id(self, task_id):
         query = "SELECT * FROM task WHERE task_id=%s"
         data = self.db.query(query, [task_id], True)
-        print(task_id)
         if data == None:
             return None
-        return data
+        return data[0]
 
     def get_task_all(self, username):
         user_id = self.__get_user_id(username)
@@ -53,7 +54,22 @@ class TaskModele:
         return task_list
 
     def get_task_id(self, username, id):
-        pass
+        user_id = self.__get_user_id(username)
+        if user_id == None:
+            print("get_task_all : can't get user id")
+            return None
+        tasks_id = self.__get_tasks_id_of_user(user_id)
+        if tasks_id == None:
+            print("get_task_all : can't get tasks id")
+            return None
+        if controller.is_id_in_tasks_id(id, tasks_id):
+            task = self.__get_task_width_id(id)
+            if task == None:
+                print("get_task_id : can't get task content")
+                return None
+            return task
+        print("get_task_id : task not found")
+        return list()
 
     def upd_task_id(self, username, id):
         pass

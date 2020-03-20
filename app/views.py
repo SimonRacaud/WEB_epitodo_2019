@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T13:40:03+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T16:32:18+01:00
+# @Last modified time: 2020-03-20T17:39:56+01:00
 
 from flask import request
 from app import app
@@ -48,20 +48,20 @@ def route_user_information():
 """
 @app.route('/user/task', methods = ['GET'])
 def route_task_get_list():
-    return controller.get_all_task()
+    return controller.task_get_all()
 
 @app.route('/user/task/<id>', methods = ['GET'])
 def route_task_get(id):
-    return "Get specific task: id=[" + id + "]\n"
+    return controller.task_get_with_id(id)
 
 @app.route('/user/task/<id>', methods = ['POST'])
 def route_task_update(id):
-    return "Update specific task: id=[" + id + "]\n"
+    return controller.task_upd_with_id(id)
 
 @app.route('/user/task/add', methods = ['POST'])
 def route_task_add():
-    return "Add a new task\n"
+    return controller.task_set_new()
 
 @app.route('/user/task/del/<id>', methods = ['POST'])
 def route_task_remove(id):
-    return "Remove a task : id=[" + id + "]\n"
+    return controller.task_del_with_id(id)
