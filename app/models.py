@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T12:08:51+01:00
+# @Last modified time: 2020-03-20T14:37:42+01:00
 
 from .DataBase import DataBase
 
@@ -19,6 +19,8 @@ class User_modele:
         else:
             query = "SELECT user_id FROM user WHERE username=%s"
         result = self.db.query(query, parameters, True)
+        if result == None:
+            return None
         if len(result) == 0:
             return False
         return True
@@ -26,31 +28,42 @@ class User_modele:
     def get_info(self, username):
         query = "SELECT user_id, username, password, logged FROM user WHERE username=%s"
         result = self.db.query(query, [username], True)
+        if result == None:
+            return None
         if len(result) == 0:
             return None
         return result[0]
 
     def signin(self, username, password):
-        if not self.user_exist(username, password):
-            return False
+        ret = self.user_exist(username, password)
+        if ret != True:
+            return ret
         query = "UPDATE user SET logged=True WHERE username=%s"
-        self.db.query(query, [username], False)
+        ret = self.db.query(query, [username], False)
+        if ret == None:
+            return None
         return True
 
     def signout(self, username):
-        if not self.user_exist(username):
-            print("user modele : signout : user doesn't exist")
-            return False
+        ret = self.user_exist(username)
+        if ret != True:
+            return ret
         query = "UPDATE user SET logged=False WHERE username=%s"
-        self.db.query(query, [username], False)
+        ret = self.db.query(query, [username], False)
+        if ret == None:
+            return None
         return True
 
     def register(self, username, password):
-        if self.user_exist(username):
-            print("user modele : register : user already exist")
+        ret = self.user_exist(username)
+        if ret == True:
             return False
+        elif ret == None:
+            return None
         query = "INSERT INTO user(username, password) VALUES (%s, %s)"
-        self.db.query(query, [username, password], False)
+        ret = self.db.query(query, [username, password], False)
+        if ret == None:
+            return None
         return True
 
 class Task_modele:
