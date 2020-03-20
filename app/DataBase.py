@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T12:32:08+01:00
+# @Last modified time: 2020-03-20T12:40:12+01:00
 
 import pymysql as sql
 
@@ -12,15 +12,12 @@ class DataBase:
 
     def __init__(self):
         if not hasattr(self, 'db'):
-            try:
-                self.connect();
-                print("Database: Connected")
-            except Exception as e:
-                print("DataBase connection exception : ", e)
+            self.connect();
 
     def query(self, request, parameters = [], get_result = False):
-        if not hasattr(self, 'db'):
-            return -1;
+        if (not hasattr(self, 'db')) or (self.db == None):
+            print("DataBase query error : Database not connected")
+            return None;
         try:
             with self.db.cursor() as cursor:
                 nb = cursor.execute(request, parameters)
@@ -39,18 +36,25 @@ class DataBase:
             return None
 
     def connect(self):
-        self.db = sql.connect(
-            host        = app.config["DATABASE_HOST"],
-            unix_socket = app.config["DATABASE_SOCK"],
-            user        = app.config["DATABASE_USER"],
-            passwd      = app.config["DATABASE_PASS"],
-            db          = app.config["DATABASE_NAME"],
-            cursorclass = sql.cursors.DictCursor)
+        try:
+            self.db = sql.connect(
+                host        = app.config["DATABASE_HOST"],
+                unix_socket = app.config["DATABASE_SOCK"],
+                user        = app.config["DATABASE_USER"],
+                passwd      = app.config["DATABASE_PASS"],
+                db          = app.config["DATABASE_NAME"],
+                cursorclass = sql.cursors.DictCursor)
+            print("Database: Connected")
+        except Exception as e:
+            print("DataBase connection exception : ", e)
+            print("Fatal error: database connection")
+            self.db = None
 
     def disconnect(self):
-        if not hasattr(self, 'db'):
-            return -1;
+        if (not hasattr(self, 'db')) or (self.db == None):
+            return False;
         self.db.close()
+        return True
 
     def __del__(self):
         self.disconnect()
