@@ -16,10 +16,26 @@ class TaskController:
         raise Exception("Error: class not instanciable")
 
     def get_all(self):
-        pass
+        if self.is_logged():
+            username = self.session.get_username()
+            tasks = self.modele.get_task_all(username)
+            if tasks == None:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            list_task = list()
+            for task in tasks:
+                element = jsonify(title = task["title"],
+                                  begin = task["begin"],
+                                  end = task["end"],
+                                  status = task["status"])
+                json_task = jsonify(tasks["task_id"] = element)
+                list_task.append(json_task)
+            result = jsonify(tasks = list_task)
+            return jsonify(result = result)
+        else:
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def get_with_id(self):
-        pass
+
 
     def set_with_id(self):
         pass
