@@ -2,28 +2,35 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T14:33:37+01:00
+# @Last modified time: 2020-03-20T14:53:28+01:00
 
 from flask import render_template
 from flask import jsonify
 from flask import json
-
 import os
 
 from app import app
 
-from .models import User_modele
-from .models import Task_modele
+from .app_session import AppSession
+from .models import AppModele
+
 from .TaskController import TaskController
 from .UserController import UserController
-from .app_session import AppSession
 
 class AppController(TaskController, UserController):
+    """
+        AppController class:
 
+        #
+        # Generate the views and return them
+        #
+
+        - UserController : function that manage all about users
+        - TaskController : function that manage all about tasks of the users
+    """
     def __init__(self):
         self.session = AppSession()
-        self.usr_modele = User_modele()
-        self.task_modele = Task_modele()
+        self.modele = AppModele()
 
     def get_json_file_content(self, filename):
             filepath = os.path.join(app.static_folder, "json", filename)
@@ -39,7 +46,7 @@ class AppController(TaskController, UserController):
         if not self.session.exist():
             return False
         username = self.session.get_username()
-        userinfo = self.usr_modele.get_info(username)
+        userinfo = self.modele.get_info(username)
         if userinfo == None:
             return False
         elif (not userinfo is None) and (userinfo["logged"] == True):
