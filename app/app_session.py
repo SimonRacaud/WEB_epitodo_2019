@@ -2,11 +2,9 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-19T18:59:27+01:00
+# @Last modified time: 2020-03-20T13:59:20+01:00
 
 from flask import session
-from flask_session import Session
-from datetime import timedelta
 
 from app import app
 
