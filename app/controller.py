@@ -2,12 +2,16 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-19T19:04:11+01:00
+# @Last modified time: 2020-03-20T12:31:32+01:00
 
 from flask import render_template
 from flask import jsonify
 from flask import session
+from flask import json
 
+import os
+
+from app import app
 from app import models
 from .models import User_modele
 from .models import Task_modele
@@ -46,37 +50,37 @@ class User_controller:
             data["key2"] = data.pop("password")
             return jsonify(result = data);
         else:
-            return "Error: not logged"
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def signin(self, username, password):
         if self.is_logged():
-            return "User already logged"
+            return self.get_json_file_content("INTERNAL_ERR.json")
         else:
             if self.usr_modele.signin(username, password):
                 if self.session.set_session(username):
-                    return "OK username: " + self.session.get_username()
+                    return self.get_json_file_content("SIGNIN_RES.json")
                 else:
-                    return "Error Session"
+                    return self.get_json_file_content("INTERNAL_ERR.json")
             else:
-                return "Error db"
+                return self.get_json_file_content("SIGNIN_ERR.json")
 
     def signout(self):
         if self.is_logged():
             username = self.session.get_username()
             self.session.del_session()
             self.usr_modele.signout(username)
-            return "OK"
+            return self.get_json_file_content("SIGNOUT_RES.json")
         else:
-            return "User not logged"
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def register(self, username, password):
         if self.is_logged():
-            return "Error: already logged"
+            return self.get_json_file_content("INTERNAL_ERR.json")
         else:
             if self.usr_modele.register(username, password):
-                return "Registered"
+                return self.get_json_file_content("REGISTER_RES.json")
             else:
-                return "Error"
+                return self.get_json_file_content("REGISTER_ERR_EXIST.json")
 
 class AppController(Task_controller, User_controller):
 
@@ -84,6 +88,15 @@ class AppController(Task_controller, User_controller):
         self.session = AppSession()
         Task_controller.__init__(self)
         User_controller.__init__(self)
+
+    def get_json_file_content(self, filename):
+            filepath = os.path.join(app.static_folder, "json", filename)
+            try:
+                with open(filepath, "r") as file:
+                    data = json.load(file)
+                return data
+            except FileNotFoundError:
+                return jsonify(error = "internal error")
 
     def is_logged(self):
         if not self.session.exist():

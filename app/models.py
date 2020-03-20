@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-19T18:59:11+01:00
+# @Last modified time: 2020-03-20T12:08:51+01:00
 
 from .DataBase import DataBase
 
@@ -46,6 +46,9 @@ class User_modele:
         return True
 
     def register(self, username, password):
+        if self.user_exist(username):
+            print("user modele : register : user already exist")
+            return False
         query = "INSERT INTO user(username, password) VALUES (%s, %s)"
         self.db.query(query, [username, password], False)
         return True
@@ -55,17 +58,17 @@ class Task_modele:
     def __init__(self):
         pass
 
-    def get_task_all(self):
+    def get_task_all(self, username):
         pass
 
-    def get_task_id(self, id):
+    def get_task_id(self, username, id):
         pass
 
-    def upd_task_id(self, id):
+    def upd_task_id(self, username, id):
         pass
 
-    def set_task(self):
+    def set_task(self, username):
         pass
 
-    def del_task_id(self, id):
+    def del_task_id(self, username, id):
         pass
