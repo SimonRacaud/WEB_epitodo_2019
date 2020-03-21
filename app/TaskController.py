@@ -38,19 +38,52 @@ class TaskController:
             return self.get_json_file_content("INTERNAL_ERR.json")
 
     def task_get_with_id(self, id):
-        # (don't forget) : check if [id] is a number
-
-        # It's just test code => to test the modele function
-        username = self.session.get_username() # DEBUG
-        task = self.modele.get_task_id(username, id) # DEBUG
-        # ret is an dictionnary : like => task["title"]
-        return jsonify(task)
+        if self.is_logged():
+            username = self.session.get_username()
+            if isinstance(id, int) == False:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            task = self.modele.get_task_id(username, id);
+            if task == None:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            ret = dict()
+            ret["title"] = task["title"]
+            ret["begin"] = str(task["begin"])
+            ret["end"] = str(task["end"])
+            ret["status"] = task["status"]
+            return jsonify(result = res)
+        else:
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def task_update_with_id(self, id, argv):
-        return "Update task"
+        if self.is_logged():
+            username = self.session.get_username()
+            if isinstance(id, int) == False:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            task_update = self.modele.upd_task_id(username, id, argv);
+            if task == None:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            return self.get_json_file_content("TASK_ID_MOD_RES.json")
+        else:
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def task_set_new(self, argv):
-        return "Add new task"
+        if self.is_logged():
+            username = self.session.get_username()
+            task_add = self.modele.set_task(username, argv);
+            if task_add == None:
+                return self.get_json_file_content("INTERNAL_ERR.json")
+            return self.get_json_file_content("TASK_ID_ADD_RES.json")
+        else:
+            return self.get_json_file_content("INTERNAL_ERR.json")
 
     def task_del_with_id(self, id):
-        return "Remove task"
+         if self.is_logged():
+             username = self.session.get_username()
+             if isinstance(id, int) == False:
+                 return self.get_json_file_content("INTERNAL_ERR.json")
+             task_del = self.modele.del_task_id(username, id);
+             if task_del == None:
+                 return self.get_json_file_content("INTERNAL_ERR.json")
+             return self.get_json_file_content("TASK_ID_DEL_RES.json")
+         else:
+             return self.get_json_file_content("INTERNAL_ERR.json")
