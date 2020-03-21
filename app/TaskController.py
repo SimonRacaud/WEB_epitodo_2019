@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T17:56:41+01:00
+# @Last modified time: 2020-03-21T09:56:33+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -46,11 +46,11 @@ class TaskController:
         # ret is an dictionnary : like => task["title"]
         return jsonify(task)
 
-    def task_up_with_id(self):
-        pass
+    def task_update_with_id(self, id, argv):
+        return "Update task"
 
-    def task_set_new(self):
-        pass
+    def task_set_new(self, argv):
+        return "Add new task"
 
-    def task_del_with_id(self):
-        pass
+    def task_del_with_id(self, id):
+        return "Remove task"

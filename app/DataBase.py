@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T08:51:25+01:00
+# @Last modified time: 2020-03-21T08:52:53+01:00
 
 import pymysql as sql
 

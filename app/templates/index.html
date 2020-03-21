@@ -5,8 +5,22 @@
   <title>{{ title }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script type="text/javascript">
+      function redirect_taskid() {
+          window.location.href = "/user/task/" + document.getElementById("taskid").value;
+      }
+      function redirect_update_taskid() {
+          document.getElementById("update_task").action = "/user/task/" + document.getElementById("uptaskid").value;
+          document.getElementById("update_task").submit()
+      }
+      function redirect_remove_taskid() {
+          document.getElementById("remove_task").action = "/user/task/del/" + document.getElementById("del_taskid").value;
+          document.getElementById("remove_task").submit()
+      }
+  </script>
 </head>
 <body>
+    <h1>DEBUG FROMs</h1>
     <form method="POST" action="/register">
         <h3>Register form</h3>
        <input type="text" name="key1" placeholder="username" />
@@ -25,5 +39,36 @@
     </form>
     <p><a href="/user">User information</a></p>
     <p><a href="/user/task">User tasks</a></p>
+
+    <form method="GET" action="/user/task/">
+        <h3 style="margin:0">View Task form</h3>
+        <input type="number" id="taskid" value="1" min="1" />
+        <input type="button" onclick="redirect_taskid()" value="Redirect" />
+    </form>
+
+    <form method="POST" action="/user/task/" id="update_task">
+        <h3 style="margin:0">Update Task form</h3>
+        <input type="number" id="uptaskid" value="1" min="1" />
+        <input type="text" name="title" placeholder="title" />
+        <input type="text" name="begin" placeholder="begin time" />
+        <input type="text" name="end" placeholder="end time" />
+        <input type="text" name="status" placeholder="status" />
+        <input type="button" onclick="redirect_update_taskid()" value="Submit" />
+    </form>
+
+    <form method="POST" action="/user/task/add">
+        <h3>Create Task form</h3>
+        <input type="text" name="title" placeholder="title" />
+        <input type="text" name="begin" placeholder="begin time" />
+        <input type="text" name="end" placeholder="end time" />
+        <input type="text" name="status" placeholder="status" />
+        <input type="submit"  />
+    </form>
+
+    <form method="POST" action="/user/task/del/" id="remove_task">
+        <h3 style="margin:0">Remove Task form</h3>
+        <input type="number" id="del_taskid" value="1" min="1" />
+        <input type="button" onclick="redirect_remove_taskid()" value="Submit" />
+    </form>
 </body>
 </html>
