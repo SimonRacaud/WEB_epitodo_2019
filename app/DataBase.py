@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T08:52:53+01:00
+# @Last modified time: 2020-03-21T15:12:24+01:00
 
 import pymysql as sql
 
@@ -55,9 +55,6 @@ class DataBase:
             return False;
         self.database.close()
         return True
-
-    def get_last_insert_id(self):
-        return self.database.insert_id()
 
     def __del__(self):
         self.disconnect()

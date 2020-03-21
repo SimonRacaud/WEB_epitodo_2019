@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T08:35:40+01:00
+# @Last modified time: 2020-03-21T15:20:11+01:00
 
 from .DataBase import DataBase
 
@@ -38,8 +38,9 @@ class TaskModele:
         return data[0]
 
     ## Update a task width a specific id
-    def __update_task_width_id(self, tasks_id, argv):
+    def __update_task_with_id(self, task_id, argv):
         if len(argv) != 4:
+            print("__update_task_with_id : invalid len of argv")
             return False
         argv.append(task_id)
         query = "UPDATE task SET title=%s, begin=%s, end=%s, status=%s WHERE task_id=%s"
@@ -53,12 +54,20 @@ class TaskModele:
         user_id = self.__get_user_id(username)
         if user_id == None:
             print("in TaskModele : can't get user id")
-            return None
+            return None, None
         tasks_id = self.__get_tasks_id_of_user(user_id)
         if tasks_id == None:
             print("in TaskModele : can't get tasks id")
-            return None
+            return None, None
         return (user_id, tasks_id)
+
+    ## Get the last task id (max)
+    def __get_max_task_id(self):
+        query = "SELECT MAX(task_id) FROM task"
+        ret = self.db.query(query, [], True)
+        if ret == None:
+            return None
+        return ret[0]['MAX(task_id)']
 
     ## Insert a new task
     def __insert_task(self, argv):
@@ -68,7 +77,7 @@ class TaskModele:
         ret = self.db.query(query, argv, False)
         if ret == None:
             return None
-        return self.db.get_last_insert_id()
+        return self.__get_max_task_id()
 
     ## Insert an entry in user_has_task table.
     def __insert_user_has_task(self, user_id, task_id):
@@ -97,6 +106,8 @@ class TaskModele:
     ## /user/task
     def get_task_all(self, username):
         user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
+        if user_id == None or tasks_id == None:
+            return None
         task_list = list()
         for id in tasks_id:
             task = self.__get_task_width_id(id['fk_task_id'])
@@ -110,6 +121,8 @@ class TaskModele:
     ## /user/task/id (GET)
     def get_task_id(self, username, id):
         user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
+        if user_id == None or tasks_id == None:
+            return None
         if controller.is_id_in_tasks_id(id, tasks_id):
             task = self.__get_task_width_id(id)
             if task == None:
@@ -122,8 +135,10 @@ class TaskModele:
     ## /user/task/id (POST)
     def upd_task_id(self, username, id, argv):
         user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
+        if user_id == None or tasks_id == None:
+            return None
         if controller.is_id_in_tasks_id(id, tasks_id):
-            if self.__update_task_width_id(id, argv):
+            if self.__update_task_with_id(id, argv):
                 return True
             else:
                 print("upd_task_id : cannot update task")
@@ -155,11 +170,11 @@ class TaskModele:
             print("del_task_id : cannot get user id")
             return None
         """
-        ret = self.__remove_task_with_task_id(task_id)
+        ret = self.__remove_task_with_task_id(id)
         if ret == None:
             print("del_task_id : fail to remove task")
             return None
-        ret = self.__remove_user_hase_task_with_task_id(task_id)
+        ret = self.__remove_user_hase_task_with_task_id(id)
         if ret == None:
             print("del_task_id : fail to remove user_has_task entr(y|ies)")
             return None

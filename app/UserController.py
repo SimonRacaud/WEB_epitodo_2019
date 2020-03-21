@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T14:46:30+01:00
+# @Last modified time: 2020-03-21T14:41:39+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -25,7 +25,7 @@ class UserController:
             data["key2"] = data.pop("password")
             return jsonify(result = data);
         else:
-            return self.get_json_file_content("INTERNAL_ERR.json")
+            return self.get_json_file_content("LOGGED_ERR.json")
 
     def signin(self, username, password):
         if self.is_logged():
@@ -51,7 +51,7 @@ class UserController:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             return self.get_json_file_content("SIGNOUT_RES.json")
         else:
-            return self.get_json_file_content("INTERNAL_ERR.json")
+            return self.get_json_file_content("LOGGED_ERR.json")
 
     def register(self, username, password):
         if self.is_logged():
