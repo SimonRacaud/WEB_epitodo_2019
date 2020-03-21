@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T08:32:21+01:00
+# @Last modified time: 2020-03-21T08:35:40+01:00
 
 from .DataBase import DataBase
 
@@ -156,7 +156,7 @@ class TaskModele:
             return None
         """
         ret = self.__remove_task_with_task_id(task_id)
-        if ret = None:
+        if ret == None:
             print("del_task_id : fail to remove task")
             return None
         ret = self.__remove_user_hase_task_with_task_id(task_id)
