@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T13:40:03+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T15:00:05+01:00
+# @Last modified time: 2020-03-21T15:47:46+01:00
 
 from flask import request
 from app import app
@@ -25,14 +25,22 @@ def route_index():
 """
 @app.route('/register', methods = ['POST'])
 def route_user_register():
-    username = request.form['key1']
-    password = request.form['key2']
+    try:
+        username = request.form['key1']
+        password = request.form['key2']
+    except Exception:
+        username = None
+        password = None
     return controller.register(username, password)
 
 @app.route('/signin', methods = ['POST'])
 def route_user_signin():
-    username = request.form['username']
-    password = request.form['password']
+    try:
+        username = request.form['username']
+        password = request.form['password']
+    except Exception:
+        username = None
+        password = None
     return controller.signin(username, password)
 
 @app.route('/signout', methods = ['POST'])
@@ -57,19 +65,37 @@ def route_task_get(id):
 @app.route('/user/task/<id>', methods = ['POST'])
 def route_task_update(id):
     argv = list()
-    argv.append(request.form['title'])
-    argv.append(request.form['begin'])
-    argv.append(request.form['end'])
-    argv.append(request.form['status'])
+    try:
+        argv.append(request.form['begin'])
+    except Exception:
+        pass
+    try:
+        argv.append(request.form['end'])
+    except Exception:
+        pass
+    try:
+        argv.append(request.form['title'])
+        argv.append(request.form['status'])
+    except Exception:
+        argv = list()
     return controller.task_update_with_id(id, argv)
 
 @app.route('/user/task/add', methods = ['POST'])
 def route_task_add():
     argv = list()
-    argv.append(request.form['title'])
-    argv.append(request.form['begin'])
-    argv.append(request.form['end'])
-    argv.append(request.form['status'])
+    try:
+        argv.append(request.form['begin'])
+    except Exception:
+        pass
+    try:
+        argv.append(request.form['end'])
+    except Exception:
+        pass
+    try:
+        argv.append(request.form['title'])
+        argv.append(request.form['status'])
+    except Exception:
+        argv = list()
     return controller.task_set_new(argv)
 
 @app.route('/user/task/del/<id>', methods = ['POST'])

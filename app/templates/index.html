@@ -29,7 +29,7 @@
     </form>
     <form method="POST" action="/signin">
         <h3>Signin form</h3>
-       <input type="text" name="username" placeholder="username" />
+       <!--<input type="text" name="username" placeholder="username" />-->
        <input type="text" name="password" placeholder="password" />
        <input type="submit" />
     </form>
@@ -52,8 +52,14 @@
         <input type="text" name="title" placeholder="title" />
         <input type="text" name="begin" placeholder="begin time" />
         <input type="text" name="end" placeholder="end time" />
-        <input type="text" name="status" placeholder="status" />
+        <select name="status">
+            <option>not started</option>
+            <option>in progress</option>
+            <option>done</option>
+            <option>a wrong option!!!</option>
+        </select>
         <input type="button" onclick="redirect_update_taskid()" value="Submit" />
+        <p>2020-03-18 18:00:12</p>
     </form>
 
     <form method="POST" action="/user/task/add">
@@ -61,7 +67,12 @@
         <input type="text" name="title" placeholder="title" />
         <input type="text" name="begin" placeholder="begin time" />
         <input type="text" name="end" placeholder="end time" />
-        <input type="text" name="status" placeholder="status" />
+        <select name="status">
+            <option>not started</option>
+            <option>in progress</option>
+            <option>done</option>
+            <option>a wrong option!!!</option>
+        </select>
         <input type="submit"  />
     </form>
 
