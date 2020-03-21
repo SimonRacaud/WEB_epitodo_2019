@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T15:20:11+01:00
+# @Last modified time: 2020-03-21T15:35:27+01:00
 
 from .DataBase import DataBase
 
@@ -61,7 +61,7 @@ class TaskModele:
             return None, None
         return (user_id, tasks_id)
 
-    ## Get the last task id (max)
+    ## Get the max task id (so the last inserted)
     def __get_max_task_id(self):
         query = "SELECT MAX(task_id) FROM task"
         ret = self.db.query(query, [], True)
@@ -93,6 +93,8 @@ class TaskModele:
         ret = self.db.query(query, [task_id], False)
         if ret == None:
             return None
+        elif ret == False:
+            return False
         return True
 
     ## Remove a task with a specific id
@@ -101,6 +103,8 @@ class TaskModele:
         ret = self.db.query(query, [task_id], False)
         if ret == None:
             return None
+        elif ret == False:
+            return False
         return True
 
     ## /user/task
@@ -130,7 +134,7 @@ class TaskModele:
                 return None
             return task
         print("get_task_id : task not found")
-        return list()
+        return False
 
     ## /user/task/id (POST)
     def upd_task_id(self, username, id, argv):
@@ -144,7 +148,7 @@ class TaskModele:
                 print("upd_task_id : cannot update task")
                 return None
         print("upd_task_id : task not found")
-        return None
+        return False
 
     ## /user/task/add
     def set_task(self, username, argv):
@@ -174,6 +178,8 @@ class TaskModele:
         if ret == None:
             print("del_task_id : fail to remove task")
             return None
+        elif ret == False:
+            return False
         ret = self.__remove_user_hase_task_with_task_id(id)
         if ret == None:
             print("del_task_id : fail to remove user_has_task entr(y|ies)")

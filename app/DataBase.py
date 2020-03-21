@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T15:12:24+01:00
+# @Last modified time: 2020-03-21T15:28:57+01:00
 
 import pymysql as sql
 
@@ -14,7 +14,13 @@ class DataBase:
         if not hasattr(self, 'database'):
             self.connect();
 
-    def query(self, request, parameters = [], get_result = False):
+    """
+        request   (string) : SQL request that will be executed
+        parameters (array) : parameters of the SQL request
+        get_result (boolean) : if the request will produce a resutlt
+        get_nb   (boolean) : return the number of rows affected by the request
+    """
+    def query(self, request, parameters = [], get_result = False, get_nb = False):
         if (not hasattr(self, 'database')) or (self.database == None):
             print("DataBase query error : Database not connected")
             return None;
@@ -25,7 +31,9 @@ class DataBase:
                     result = cursor.fetchall()
             if not get_result:
                 self.database.commit()
-                if nb != 0:
+                if get_nb:
+                    return nb
+                elif nb != 0:
                     return True
                 else:
                     return False

@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T15:20:13+01:00
+# @Last modified time: 2020-03-21T15:33:25+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -47,6 +47,8 @@ class TaskController:
             task = self.modele.get_task_id(username, id);
             if task == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
+            elif task == False:
+                return self.get_json_file_content("TASK_ID_ERR.json")
             ret = dict()
             ret["title"] = task["title"]
             ret["begin"] = str(task["begin"])
@@ -66,6 +68,8 @@ class TaskController:
             task_update = self.modele.upd_task_id(username, id, argv);
             if task_update == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
+            elif task_update == False:
+                return self.get_json_file_content("TASK_ID_ERR.json")
             return self.get_json_file_content("TASK_ID_MOD_RES.json")
         else:
             return self.get_json_file_content("LOGGED_ERR.json")
@@ -76,6 +80,8 @@ class TaskController:
             task_add = self.modele.set_task(username, argv);
             if task_add == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
+            elif task_add == False:
+                return self.get_json_file_content("TASK_ID_ERR.json")
             return self.get_json_file_content("TASK_ID_ADD_RES.json")
         else:
             return self.get_json_file_content("LOGGED_ERR.json")
@@ -90,6 +96,8 @@ class TaskController:
              task_del = self.modele.del_task_id(username, id);
              if task_del == None:
                  return self.get_json_file_content("INTERNAL_ERR.json")
+             elif task_del == False:
+                return self.get_json_file_content("TASK_ID_ERR.json")
              return self.get_json_file_content("TASK_ID_DEL_RES.json")
          else:
              return self.get_json_file_content("LOGGED_ERR.json")
