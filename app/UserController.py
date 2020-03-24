@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T14:41:39+01:00
+# @Last modified time: 2020-03-24T11:30:45+01:00
 
 from flask import render_template
 from flask import jsonify
@@ -21,8 +21,6 @@ class UserController:
             data = self.modele.get_info(username)
             if data == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
-            data["key1"] = data.pop("username")
-            data["key2"] = data.pop("password")
             return jsonify(result = data);
         else:
             return self.get_json_file_content("LOGGED_ERR.json")
