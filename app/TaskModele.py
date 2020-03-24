@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-24T11:25:43+01:00
+# @Last modified time: 2020-03-24T11:43:41+01:00
 
 from .DataBase import DataBase
 
@@ -39,12 +39,8 @@ class TaskModele:
 
     ## Update a task width a specific id
     def __update_task_with_id(self, task_id, title, status, begin, end):
-        if len(argv) != 4:
-            print("__update_task_with_id : invalid len of argv")
-            return False
-        argv.append(task_id)
         query = "UPDATE task SET title=%s, begin=%s, end=%s, status=%s WHERE task_id=%s"
-        ret = self.db.query(query, (title, status, begin, end), False)
+        ret = self.db.query(query, (title, begin, end, status, task_id), False)
         if ret == None:
             return False
         return True
