@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-21T15:35:27+01:00
+# @Last modified time: 2020-03-24T11:25:43+01:00
 
 from .DataBase import DataBase
 
@@ -38,13 +38,13 @@ class TaskModele:
         return data[0]
 
     ## Update a task width a specific id
-    def __update_task_with_id(self, task_id, argv):
+    def __update_task_with_id(self, task_id, title, status, begin, end):
         if len(argv) != 4:
             print("__update_task_with_id : invalid len of argv")
             return False
         argv.append(task_id)
         query = "UPDATE task SET title=%s, begin=%s, end=%s, status=%s WHERE task_id=%s"
-        ret = self.db.query(query, argv, False)
+        ret = self.db.query(query, (title, status, begin, end), False)
         if ret == None:
             return False
         return True
@@ -70,11 +70,9 @@ class TaskModele:
         return ret[0]['MAX(task_id)']
 
     ## Insert a new task
-    def __insert_task(self, argv):
-        if len(argv) != 4:
-            return None
+    def __insert_task(self, title, status, begin = None, end = None):
         query = "INSERT INTO task (title, begin, end, status) VALUES (%s, %s, %s, %s)"
-        ret = self.db.query(query, argv, False)
+        ret = self.db.query(query, (title, begin, end, status), False)
         if ret == None:
             return None
         return self.__get_max_task_id()
@@ -142,7 +140,7 @@ class TaskModele:
         if user_id == None or tasks_id == None:
             return None
         if controller.is_id_in_tasks_id(id, tasks_id):
-            if self.__update_task_with_id(id, argv):
+            if self.__update_task_with_id(id, argv['title'], argv['status'], argv['begin'], argv['end']):
                 return True
             else:
                 print("upd_task_id : cannot update task")
@@ -156,7 +154,7 @@ class TaskModele:
         if user_id == None:
             print("set_task : cannot get user id")
             return None
-        task_id = self.__insert_task(argv)
+        task_id = self.__insert_task(argv['title'], argv['status'], argv['begin'], argv['end'])
         if task_id == None:
             print("set_task : fail to insert task in db")
             return None

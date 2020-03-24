@@ -23,29 +23,33 @@
     <h1>DEBUG FROMs</h1>
     <form method="POST" action="/register">
         <h3>Register form</h3>
-       <input type="text" name="key1" placeholder="username" />
-       <input type="text" name="key2" placeholder="password" />
-       <input type="submit" />
+        <input type="text" name="username" placeholder="username" />
+        <input type="text" name="password" placeholder="password" />
+        <input type="submit" />
     </form>
+    <p></p>
     <form method="POST" action="/signin">
         <h3>Signin form</h3>
-       <!--<input type="text" name="username" placeholder="username" />-->
-       <input type="text" name="password" placeholder="password" />
-       <input type="submit" />
+        <input type="text" name="username" placeholder="username" />
+        <input type="text" name="password" placeholder="password" />
+        <input type="submit" />
     </form>
+    <p></p>
     <form method="POST" action="/signout">
      <h3>Signout form</h3>
     <input type="submit" />
     </form>
+    <p></p>
     <p><a href="/user">User information</a></p>
+    <p></p>
     <p><a href="/user/task">User tasks</a></p>
-
+    <p></p>
     <form method="GET" action="/user/task/">
         <h3 style="margin:0">View Task form</h3>
         <input type="number" id="taskid" value="1" min="1" />
         <input type="button" onclick="redirect_taskid()" value="Redirect" />
     </form>
-
+    <p></p>
     <form method="POST" action="/user/task/" id="update_task">
         <h3 style="margin:0">Update Task form</h3>
         <input type="number" id="uptaskid" value="1" min="1" />
@@ -61,7 +65,7 @@
         <input type="button" onclick="redirect_update_taskid()" value="Submit" />
         <p>2020-03-18 18:00:12</p>
     </form>
-
+    <p></p>
     <form method="POST" action="/user/task/add">
         <h3>Create Task form</h3>
         <input type="text" name="title" placeholder="title" />
@@ -75,7 +79,7 @@
         </select>
         <input type="submit"  />
     </form>
-
+    <p></p>
     <form method="POST" action="/user/task/del/" id="remove_task">
         <h3 style="margin:0">Remove Task form</h3>
         <input type="number" id="del_taskid" value="1" min="1" />

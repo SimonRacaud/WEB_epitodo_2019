@@ -2,12 +2,13 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T17:53:41+01:00
+# @Last modified time: 2020-03-24T10:36:45+01:00
 
 from flask import render_template
 from flask import jsonify
 from flask import json
 import os
+from datetime import datetime
 
 from app import app
 
@@ -64,3 +65,17 @@ class AppController(TaskController, UserController):
 
     def get_home_page(self):
         return render_template("index.html", title="MAIN PAGE")
+
+    def get_int_id(self, id):
+        try:
+            id = int(id)
+            return id
+        except ValueError:
+            return None
+
+    def convert_str_datetime(self, str):
+        try:
+            time = datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
+            return time
+        except ValueError:
+            return None
