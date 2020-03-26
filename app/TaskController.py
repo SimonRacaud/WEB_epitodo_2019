@@ -44,7 +44,7 @@ class TaskController:
             except ValueError:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             username = self.session.get_username()
-            task = self.modele.get_task_id(username, id);
+            task = self.modele.get_task_id(username, id)
             if task == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             elif task == False:
@@ -65,7 +65,7 @@ class TaskController:
             except ValueError:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             username = self.session.get_username()
-            task_update = self.modele.upd_task_id(username, id, argv);
+            task_update = self.modele.upd_task_id(username, id, argv)
             if task_update == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             elif task_update == False:
@@ -77,7 +77,7 @@ class TaskController:
     def task_set_new(self, argv):
         if self.is_logged():
             username = self.session.get_username()
-            task_add = self.modele.set_task(username, argv);
+            task_add = self.modele.set_task(username, argv)
             if task_add == None:
                 return self.get_json_file_content("INTERNAL_ERR.json")
             elif task_add == False:
@@ -93,7 +93,7 @@ class TaskController:
              except ValueError:
                  return self.get_json_file_content("INTERNAL_ERR.json")
              username = self.session.get_username()
-             task_del = self.modele.del_task_id(username, id);
+             task_del = self.modele.del_task_id(username, id)
              if task_del == None:
                  return self.get_json_file_content("INTERNAL_ERR.json")
              elif task_del == False:
