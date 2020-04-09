@@ -16,10 +16,10 @@ class TaskModele:
     ## Get the user_id of an user
     def __get_user_id(self, username):
         query = "SELECT user_id FROM user WHERE username=%s"
-        user = self.db.query(query, [username], True)
+        user = self.db.query_fetchone(query, [username])
         if user == None or len(user) != 1:
             return None
-        return user[0]["user_id"]
+        return user['user_id']
 
     ## Get all the task_id of an user
     def __get_tasks_id_of_user(self, user_id):
@@ -32,10 +32,10 @@ class TaskModele:
     ## Get a task width a specific id
     def __get_task_width_id(self, task_id):
         query = "SELECT * FROM task WHERE task_id=%s"
-        data = self.db.query(query, [task_id], True)
+        data = self.db.query_fetchone(query, [task_id])
         if data == None:
             return None
-        return data[0]
+        return data
 
     ## Update a task width a specific id
     def __update_task_with_id(self, task_id, title, status, begin, end):
@@ -60,15 +60,15 @@ class TaskModele:
     ## Get the max task id (so the last inserted)
     def __get_max_task_id(self):
         query = "SELECT MAX(task_id) FROM task"
-        ret = self.db.query(query, [], True)
+        ret = self.db.query_fetchone(query, [])
         if ret == None:
             return None
-        return ret[0]['MAX(task_id)']
+        return ret['MAX(task_id)']
 
     ## Insert a new task
     def __insert_task(self, title, status, begin = None, end = None):
         query = "INSERT INTO task (title, begin, end, status) VALUES (%s, %s, %s, %s)"
-        ret = self.db.query(query, (title, begin, end, status), False)
+        ret = self.db.query(query, (title, begin, end, status), True)
         if ret == None:
             return None
         return self.__get_max_task_id()

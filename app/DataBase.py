@@ -12,7 +12,7 @@ class DataBase:
 
     def __init__(self):
         if not hasattr(self, 'database'):
-            self.connect();
+            self.connect()
 
     """
         request   (string) : SQL request that will be executed
@@ -23,7 +23,7 @@ class DataBase:
     def query(self, request, parameters = [], get_result = False, get_nb = False):
         if (not hasattr(self, 'database')) or (self.database == None):
             print("DataBase query error : Database not connected")
-            return None;
+            return None
         try:
             with self.database.cursor() as cursor:
                 nb = cursor.execute(request, parameters)
@@ -40,7 +40,20 @@ class DataBase:
             else:
                 return result
         except Exception:
-            self.disconnect()
+            self.database.rollback()
+            return None
+
+    def query_fetchone(self, request, parameters = []):
+        if (not hasattr(self, 'database')) or (self.database == None):
+            print("DataBase query error : Database not connected")
+            return None
+        try:
+            with self.database.cursor() as cursor:
+                cursor.execute(request, parameters)
+                result = cursor.fetchone()
+            return result
+        except Exception:
+            self.database.rollback()
             return None
 
     def connect(self):
@@ -60,7 +73,7 @@ class DataBase:
 
     def disconnect(self):
         if (not hasattr(self, 'database')) or (self.database == None):
-            return False;
+            return False
         #self.database.close()
         return True
 
