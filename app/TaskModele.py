@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-24T11:43:41+01:00
+# @Last modified time: 2020-04-09T17:43:22+02:00
 
 from .DataBase import DataBase
 
@@ -20,42 +20,6 @@ class TaskModele:
         if user == None or len(user) != 1:
             return None
         return user['user_id']
-
-    ## Get all the task_id of an user
-    def __get_tasks_id_of_user(self, user_id):
-        query = "SELECT fk_task_id FROM user_has_task WHERE fk_user_id=%s"
-        tasks_id = self.db.query(query, [user_id], True)
-        if tasks_id == None:
-            return None
-        return tasks_id
-
-    ## Get a task width a specific id
-    def __get_task_width_id(self, task_id):
-        query = "SELECT * FROM task WHERE task_id=%s"
-        data = self.db.query_fetchone(query, [task_id])
-        if data == None:
-            return None
-        return data
-
-    ## Update a task width a specific id
-    def __update_task_with_id(self, task_id, title, status, begin, end):
-        query = "UPDATE task SET title=%s, begin=%s, end=%s, status=%s WHERE task_id=%s"
-        ret = self.db.query(query, (title, begin, end, status, task_id), False)
-        if ret == None:
-            return False
-        return True
-
-    ## Get the id of an user && all the task_id owned by this user
-    def __get_task_and_user_id_with_username(self, username):
-        user_id = self.__get_user_id(username)
-        if user_id == None:
-            print("in TaskModele : can't get user id")
-            return None, None
-        tasks_id = self.__get_tasks_id_of_user(user_id)
-        if tasks_id == None:
-            print("in TaskModele : can't get tasks id")
-            return None, None
-        return (user_id, tasks_id)
 
     ## Get the max task id (so the last inserted)
     def __get_max_task_id(self):
@@ -82,9 +46,9 @@ class TaskModele:
         return True
 
     ## Remove all entries in user_has_task than have a specific task_id
-    def __remove_user_hase_task_with_task_id(self, task_id):
-        query = "DELETE FROM user_has_task WHERE fk_task_id=%s"
-        ret = self.db.query(query, [task_id], False)
+    def __remove_user_hase_task_with_task_id(self, task_id, user_id):
+        query = "DELETE FROM user_has_task WHERE fk_task_id=%s AND fk_user_id=%s"
+        ret = self.db.query(query, [task_id, user_id], False)
         if ret == None:
             return None
         elif ret == False:
@@ -103,46 +67,51 @@ class TaskModele:
 
     ## /user/task
     def get_task_all(self, username):
-        user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
-        if user_id == None or tasks_id == None:
+        query = "SELECT task_id, title, begin, end, status FROM task INNER JOIN user_has_task ON user_has_task.fk_task_id=task.task_id AND user_has_task.fk_user_id=%s"
+        user_id = self.__get_user_id(username)
+        if user_id == None:
             return None
-        task_list = list()
-        for id in tasks_id:
-            task = self.__get_task_width_id(id['fk_task_id'])
-            if task == None:
-                print("get_task_all : can't get task content")
-                return None
-            else:
-                task_list.append(task)
-        return task_list
+        ret = self.db.query(query, [user_id], True)
+        if ret == None:
+            print("get_task_all : Fail to get all tasks")
+            return None
+        return ret
 
     ## /user/task/id (GET)
     def get_task_id(self, username, id):
-        user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
-        if user_id == None or tasks_id == None:
+        query = ("SELECT task_id, title, begin, end, status"
+                " FROM task"
+                " INNER JOIN user_has_task"
+                " ON"
+                " user_has_task.fk_task_id=task.task_id"
+                " AND"
+                " user_has_task.fk_user_id=%s"
+                " AND"
+                " user_has_task.fk_task_id=%s")
+        user_id = self.__get_user_id(username)
+        if user_id == None:
             return None
-        if controller.is_id_in_tasks_id(id, tasks_id):
-            task = self.__get_task_width_id(id)
-            if task == None:
-                print("get_task_id : can't get task content")
-                return None
-            return task
-        print("get_task_id : task not found")
-        return False
+        task = self.db.query_fetchone(query, [user_id, id])
+        if task == None:
+            print("get_task_id : Fail to get task task_id = ", id, ", user_id = ", user_id)
+            return None
+        return task
 
     ## /user/task/id (POST)
     def upd_task_id(self, username, id, argv):
-        user_id, tasks_id = self.__get_task_and_user_id_with_username(username)
-        if user_id == None or tasks_id == None:
+        query = ("UPDATE task INNER JOIN user_has_task"
+                " ON user_has_task.fk_task_id=task.task_id"
+                " AND user_has_task.fk_user_id=%s"
+                " AND user_has_task.fk_task_id=%s"
+                " SET title=%s, begin=%s, end=%s, status=%s")
+        user_id = self.__get_user_id(username)
+        if user_id == None:
             return None
-        if controller.is_id_in_tasks_id(id, tasks_id):
-            if self.__update_task_with_id(id, argv['title'], argv['status'], argv['begin'], argv['end']):
-                return True
-            else:
-                print("upd_task_id : cannot update task")
-                return None
-        print("upd_task_id : task not found")
-        return False
+        ret = self.db.query(query, [user_id, id, argv['title'], argv['begin'], argv['end'], argv['status']])
+        if ret != True:
+            print("upd_task_id : cannot update task")
+            return None
+        return True
 
     ## /user/task/add
     def set_task(self, username, argv):
@@ -161,21 +130,19 @@ class TaskModele:
         return True
 
     ## /user/task/del/id
-    def del_task_id(self, username, id): # remove only tasks of the logged user ?
-        """
+    def del_task_id(self, username, id):
         user_id = self.__get_user_id(username)
         if user_id == None:
             print("del_task_id : cannot get user id")
             return None
-        """
-        ret = self.__remove_task_with_task_id(id)
-        if ret == None:
-            print("del_task_id : fail to remove task")
-            return None
-        elif ret == False:
-            return False
-        ret = self.__remove_user_hase_task_with_task_id(id)
+        ret = self.__remove_user_hase_task_with_task_id(id, user_id)
         if ret == None:
             print("del_task_id : fail to remove user_has_task entr(y|ies)")
+            return None
+        elif ret == False:
+            print("del_task_id : fail to remove, the user is not the owner")
+        ret = self.__remove_task_with_task_id(id)
+        if ret == None:
+            print("del_task_id : fail to remove the task entry")
             return None
         return True
