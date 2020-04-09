@@ -16,7 +16,7 @@ class UserModele:
             parameters.append(password)
         else:
             query = "SELECT user_id FROM user WHERE username=%s"
-        result = self.db.query(query, parameters, True)
+        result = self.db.query_fetchone(query, parameters)
         if result == None:
             return None
         if len(result) == 0:
@@ -25,12 +25,12 @@ class UserModele:
 
     def get_info(self, username):
         query = "SELECT user_id, username, password, logged FROM user WHERE username=%s"
-        result = self.db.query(query, [username], True)
+        result = self.db.query_fetchone(query, [username])
         if result == None:
             return None
         if len(result) == 0:
             return None
-        return result[0]
+        return result
 
     def signin(self, username, password):
         ret = self.user_exist(username, password)
