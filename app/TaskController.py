@@ -16,7 +16,7 @@ class TaskController:
     def __init__(self):
         raise Exception("Error: class not instanciable")
 
-    def __check_format_datetime(self, argv = dict()):
+    def check_format_datetime(self, argv = dict()):
         if 'begin' in argv and argv['begin'] != None and (argv['begin'] != ""):
             argv['begin'] = self.convert_str_datetime(argv['begin'])
             if argv['begin'] == None:
@@ -35,7 +35,7 @@ class TaskController:
             argv['end'] = None
         return True
 
-    def __check_status_value(self, status = str()):
+    def check_status_value(self, status = str()):
         valid_values = ['not started', 'in progress', 'done']
         if status in valid_values:
             return True
@@ -46,7 +46,7 @@ class TaskController:
             username = self.session.get_username()
             tasks = self.modele.get_task_all(username)
             if tasks == None:
-                return self.get_json_file_content("INTERNAL_ERR.json")
+                return render_template("error.html")
             list_task = list()
             for task in tasks:
                 element = dict()

@@ -75,3 +75,8 @@ p#create {
     margin-left: 35px;
     text-align: left;
 }
+
+p#error {
+    color: red;
+    font-size: 100px;
+}

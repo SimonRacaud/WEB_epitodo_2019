@@ -7,16 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css') }}">
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script type="text/javascript">
-      function redirect_taskid() {
-          window.location.href = "/user/task/" + document.getElementById("taskid").value;
-      }
       function redirect_update_taskid(taskid) {
           document.getElementById("update_task").action = "/update_task/" + taskid;
           document.getElementById("update_task").submit()
-      }
-      function redirect_remove_taskid() {
-          document.getElementById("remove_task").action = "/user/task/del/" + document.getElementById("del_taskid").value;
-          document.getElementById("remove_task").submit()
       }
     </script>
   </head>
