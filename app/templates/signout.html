@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>EPYTODO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="text/javascript">
+      function redirect_taskid() {
+          window.location.href = "/user/task/" + document.getElementById("taskid").value;
+      }
+      function redirect_update_taskid() {
+          document.getElementById("update_task").action = "/user/task/" + document.getElementById("uptaskid").value;
+          document.getElementById("update_task").submit()
+      }
+      function redirect_remove_taskid() {
+          document.getElementById("remove_task").action = "/user/task/del/" + document.getElementById("del_taskid").value;
+          document.getElementById("remove_task").submit()
+      }
+    </script>
+  </head>
+  <body class = "background">
+    
+    <header class = "title">EPYTODO</header>
+
+    <nav class = "nav">
+
+      <a id = "other" href = "/tasks_page">All tasks</a>
+
+      <a id = "other" href = "add_task_page">Create new task</a>
+
+      <a id = "current">Sign out</a>
+
+    </nav>
+
+    <div class = "login">
+      
+      <form method="POST" action="/signout_redirect" class = "login">
+      
+        <p id = "signout">Sign out</p>
+        <input id = "signout" type="submit" value = "Sign out"/>
+
+      </form>
+   
+    </div>
+
+  </body>
+</html>

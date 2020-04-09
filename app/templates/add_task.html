@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>EPYTODO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="text/javascript">
+      function redirect_taskid() {
+          window.location.href = "/user/task/" + document.getElementById("taskid").value;
+      }
+      function redirect_update_taskid() {
+          document.getElementById("update_task").action = "/user/task/" + document.getElementById("uptaskid").value;
+          document.getElementById("update_task").submit()
+      }
+      function redirect_remove_taskid() {
+          document.getElementById("remove_task").action = "/user/task/del/" + document.getElementById("del_taskid").value;
+          document.getElementById("remove_task").submit()
+      }
+    </script>
+  </head>
+  <body class = "background">
+    
+    <header class = "title">EPYTODO</header>
+
+    <nav class = "nav">
+
+      <a id = "other" href = "/tasks_page">All tasks</a>
+
+      <a id = "current">Create new task</a>
+
+      <a id = "other" href = "signout_page">Sign out</a>
+
+    </nav>
+
+    <div class = "login">
+      
+        <form class = "login" method="POST" action="/add_task">
+            
+            <p id = "create">Create New Task</p>
+            <p id = "info">Name of the task</p>
+            <input id = "create" type="text" name="title" placeholder="Title" />
+            <p id = "info">New task begin date (Exemple : 2020-01-01 00:00:01)</p>
+            <input id = "create" type="text" name="begin" placeholder="Begin time" />
+            <p id = "info">New task end date (Exemple : 2020-01-01 00:00:02)</p>
+            <input id = "create" type="text" name="end" placeholder="End time" />
+            <p id = "info">Current status of the new task</p>
+            <select id = "create" name="status">
+                <option>not started</option>
+                <option>in progress</option>
+                <option>done</option>
+            </select>
+            <input id = "create" type="submit" value = "Submit new task"/>
+        </form>
+   
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>EPYTODO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="text/javascript">
+      function redirect_taskid() {
+          window.location.href = "/user/task/" + document.getElementById("taskid").value;
+      }
+      function redirect_update_taskid(taskid) {
+          document.getElementById("update_task").action = "/update_task/" + taskid;
+          document.getElementById("update_task").submit()
+      }
+      function redirect_remove_taskid() {
+          document.getElementById("remove_task").action = "/user/task/del/" + document.getElementById("del_taskid").value;
+          document.getElementById("remove_task").submit()
+      }
+    </script>
+  </head>
+  <body class = "background">
+    
+    <header class = "title">EPYTODO</header>
+
+    <nav class = "nav">
+
+      <a id = "other" href = "/tasks_page">All tasks</a>
+
+      <a id = "other" href = "/add_task_page">Create new task</a>
+
+      <a id = "other" href = "signout_page">Sign out</a>
+
+    </nav>
+
+    <div class = "login">
+      
+        <form class = "login" method="POST" action="/update_task/" id = "update_task">
+            
+            <p id = "create">Update Task</p>
+            <p id = "info">Name of the task</p>
+            <input id = "create" type="text" name="title" placeholder="Title" value = "{{ result['title']}}"/>
+            <p id = "info">New task begin date (Exemple : 2020-01-01 00:00:01)</p>
+            <input id = "create" type="text" name="begin" placeholder="Begin time" value = "{{ result['begin']}}"/>
+            <p id = "info">New task end date (Exemple : 2020-01-01 00:00:02)</p>
+            <input id = "create" type="text" name="end" placeholder="End time" value = "{{ result['end']}}"/>
+            <p id = "info">Current status of the new task</p>
+            <select id = "create" name="status">
+                <option>not started</option>
+                <option>in progress</option>
+                <option>done</option>
+            </select>
+            <input id = "create" onclick="redirect_update_taskid({{ id }})" type="submit" value = "Update task"/>
+        </form>
+   
+    </div>
+
+  </body>
+</html>

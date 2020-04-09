@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>EPYTODO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script type="text/javascript">
+      function redirect_taskid() {
+          window.location.href = "/user/task/" + document.getElementById("taskid").value;
+      }
+      function redirect_remove_taskid(taskid) {
+          document.getElementById("remove_task").action = "/delete_task/" + taskid;
+          document.getElementById("remove_task").submit()
+      }
+      function redirect_update_taskid(taskid) {
+          document.getElementById("update_task").action = "/update_page/" + taskid;
+          document.getElementById("update_task").submit()
+      }
+    </script>
+  </head>
+  <body class = "background">
+
+    <header class = "title">EPYTODO</header>
+   
+    <nav class = "nav">
+
+        <a id = "current">All tasks</a>
+
+        <a id = "other" href = "add_task_page">Create new task</a>
+
+        <a id = "other" href = "signout_page">Sign out</a>
+
+    </nav>
+
+    <div class = "task">
+      
+        {% for i in range (0, length)  %}
+          <div id = "task_data">
+            
+            <a>Name of the task : {{ result['tasks'][i]['title']}}<br>
+            Begin of the task : {{ result['tasks'][i]['begin']}}<br>
+            End of the task : {{ result['tasks'][i]['end']}}<br>
+            ID of the task : {{ i }}<br>
+            Status of the task : {{ result['tasks'][i]['status']}}</a>
+
+            <form method="POST" action="/delete_task/" id="remove_task">
+
+                <input id = "button" type="button" onclick="redirect_remove_taskid({{ result['tasks'][i]['id'] }})" value="Delete"/>
+
+            </form>
+
+            <form method="GET" action="/update_page/" id = "update_task">
+
+                <input id = "button" type="button" value="Update" onclick = "redirect_update_taskid({{ result['tasks'][i]['id'] }})"/>
+
+            </form>
+
+          </div>
+        {%  endfor  %}
+   
+    </div>
+
+  </body>
+</html>

@@ -17,6 +17,7 @@ from .models import AppModele
 
 from .TaskController import TaskController
 from .UserController import UserController
+from .WebAppController import WebAppController
 
 def is_id_in_tasks_id(id, array):
     for task_id in array:
@@ -24,7 +25,7 @@ def is_id_in_tasks_id(id, array):
             return True
     return False
 
-class AppController(TaskController, UserController):
+class AppController(TaskController, UserController, WebAppController):
     """
         AppController class:
 
@@ -62,9 +63,6 @@ class AppController(TaskController, UserController):
             print("In AppController:is_loggged()")
             print("ERROR : User not logged in database but the session exist")
         return False
-
-    def get_home_page(self):
-        return render_template("index.html", title="MAIN PAGE")
 
     def get_int_id(self, id):
         try:
