@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T18:02:49+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-24T10:37:12+01:00
+# @Last modified time: 2020-04-11T18:25:10+02:00
 
 import pymysql as sql
 
@@ -39,8 +39,9 @@ class DataBase:
                     return False
             else:
                 return result
-        except Exception:
-            self.database.rollback()
+        except Exception as e:
+            print("DataBase exception : ", e)
+            self.rollback()
             return None
 
     def query_fetchone(self, request, parameters = []):
@@ -52,8 +53,9 @@ class DataBase:
                 cursor.execute(request, parameters)
                 result = cursor.fetchone()
             return result
-        except Exception:
-            self.database.rollback()
+        except Exception as e:
+            print("DataBase exception : ", e)
+            self.rollback()
             return None
 
     def connect(self):
@@ -76,6 +78,12 @@ class DataBase:
             return False
         #self.database.close()
         return True
+
+    def rollback(self):
+        try:
+            self.database.rollback()
+        except Exception:
+            print("The database is not available (maybe offline)")
 
     def __del__(self):
         self.disconnect()
