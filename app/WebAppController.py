@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-03-24T11:52:07+01:00
+# @Last modified time: 2020-04-11T17:36:45+02:00
 
 from flask import render_template
 from flask import redirect
@@ -47,6 +47,9 @@ class WebAppController:
             return self.get_tasks_page()
         else:
             return render_template("login.html")
+
+    def get_debug_page(self):
+        return render_template("debug.html")
 
     def get_signout_page(self):
         if self.is_logged():
@@ -117,8 +120,8 @@ class WebAppController:
 
     def apply_new_task(self, argv = dict()):
         if self.is_logged():
-            ret_time = self.__check_format_datetime(argv)
-            ret_stat = self.__check_status_value(argv['status'])
+            ret_time = self.check_format_datetime(argv)
+            ret_stat = self.check_status_value(argv['status'])
             if len(argv) == 0 or ret_time == None or ret_stat == None:
                 return render_template("error.html")
             username = self.session.get_username()

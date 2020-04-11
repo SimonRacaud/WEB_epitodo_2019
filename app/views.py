@@ -2,7 +2,7 @@
 # @Date:   2020-03-18T13:40:03+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-24T11:00:08+01:00
+# @Last modified time: 2020-04-11T17:51:02+02:00
 
 from flask import request
 from flask import redirect
@@ -21,6 +21,14 @@ controller = AppController()
 def route_index():
     """ Home page """
     return controller.get_home_page()
+
+"""
+    DEBUG
+"""
+@app.route('/debug', methods = ['GET'])
+def route_debug_index():
+    """ Debug page """
+    return controller.get_debug_page()
 
 """
     USER
