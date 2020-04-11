@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-03-20T15:01:55+01:00
+# @Last modified time: 2020-04-11T17:54:35+02:00
 
 class UserModele:
 
@@ -11,15 +11,13 @@ class UserModele:
 
     def user_exist(self, username, password = None):
         parameters = [username]
-        if not password is None:
+        if not password == None:
             query = "SELECT user_id FROM user WHERE username=%s AND password=%s"
             parameters.append(password)
         else:
             query = "SELECT user_id FROM user WHERE username=%s"
         result = self.db.query_fetchone(query, parameters)
-        if result == None:
-            return None
-        if len(result) == 0:
+        if result == None or len(result) == 0:
             return False
         return True
 

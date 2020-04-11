@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: WEB_epytodo_2019
 # @Last modified by:   simon
-# @Last modified time: 2020-04-09T17:43:22+02:00
+# @Last modified time: 2020-04-11T18:26:41+02:00
 
 from .DataBase import DataBase
 
@@ -65,6 +65,21 @@ class TaskModele:
             return False
         return True
 
+    def __check_task_exist(self, task_id, user_id):
+        query = ("SELECT task_id"
+                " FROM task"
+                " INNER JOIN user_has_task"
+                " ON"
+                " user_has_task.fk_task_id=task.task_id"
+                " AND"
+                " user_has_task.fk_user_id=%s"
+                " AND"
+                " user_has_task.fk_task_id=%s")
+        task = self.db.query_fetchone(query, [user_id, task_id])
+        if task == None:
+            return False
+        return True
+
     ## /user/task
     def get_task_all(self, username):
         query = "SELECT task_id, title, begin, end, status FROM task INNER JOIN user_has_task ON user_has_task.fk_task_id=task.task_id AND user_has_task.fk_user_id=%s"
@@ -93,8 +108,8 @@ class TaskModele:
             return None
         task = self.db.query_fetchone(query, [user_id, id])
         if task == None:
-            print("get_task_id : Fail to get task task_id = ", id, ", user_id = ", user_id)
-            return None
+            print("get_task_id : Fail to get task. task_id(", id, "), user_id(", user_id, ")")
+            return False
         return task
 
     ## /user/task/id (POST)
@@ -107,6 +122,10 @@ class TaskModele:
         user_id = self.__get_user_id(username)
         if user_id == None:
             return None
+        exist = self.__check_task_exist(id, user_id)
+        if exist == False:
+            print("update task : task does not exist. task_id(", id, "), user_id(", user_id, ")")
+            return False
         ret = self.db.query(query, [user_id, id, argv['title'], argv['begin'], argv['end'], argv['status']])
         if ret != True:
             print("upd_task_id : cannot update task")
@@ -135,6 +154,9 @@ class TaskModele:
         if user_id == None:
             print("del_task_id : cannot get user id")
             return None
+        exist = self.__check_task_exist(id, user_id)
+        if exist == False:
+            return False
         ret = self.__remove_user_hase_task_with_task_id(id, user_id)
         if ret == None:
             print("del_task_id : fail to remove user_has_task entr(y|ies)")
