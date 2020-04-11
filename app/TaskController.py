@@ -2,7 +2,7 @@
 # @Date:   2020-03-17T15:19:40+01:00
 # @Project: PROJECT_NAME
 # @Last modified by:   simon
-# @Last modified time: 2020-04-11T18:08:49+02:00
+# @Last modified time: 2020-04-11T18:44:20+02:00
 
 from flask import render_template
 from flask import jsonify
@@ -16,23 +16,32 @@ class TaskController:
     def __init__(self):
         raise Exception("Error: class not instanciable")
 
-    def check_format_datetime(self, argv = dict()):
+    def check_format_datetime(self, argv = dict(), null_begin = True):
+        datetime_begin = None
+        datetime_end = None
+
         if 'begin' in argv and argv['begin'] != None and (argv['begin'] != ""):
-            argv['begin'] = self.convert_str_datetime(argv['begin'])
-            if argv['begin'] == None:
+            datetime_begin = self.convert_str_datetime(argv['begin'])
+            if datetime_begin == None:
                 print("check format datetime : begin value error")
                 return None
-            argv['begin'] = str(argv['begin'])
-        elif ('begin' in argv) and (argv['begin'] == ""):
+            argv['begin'] = str(datetime_begin)
+        elif null_begin and ('begin' in argv) and (argv['begin'] == ""):
             argv['begin'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            argv['begin'] = None
         if ('end' in argv) and (argv['end'] != None) and (argv['end'] != ""):
-            argv['end'] = self.convert_str_datetime(argv['end'])
-            if argv['end'] == None:
+            datetime_end = self.convert_str_datetime(argv['end'])
+            if datetime_end == None:
                 print("check format datetime : end value error")
                 return None
-            argv['end'] = str(argv['end'])
+            argv['end'] = str(datetime_end)
         elif ('end' in argv) and (argv['end'] == ""):
             argv['end'] = None
+        if datetime_begin != None and datetime_end != None:
+            if datetime_begin > datetime_end:
+                print("check_format_datetime: begin greater than end")
+                return None
         return True
 
     def check_status_value(self, status = str()):
@@ -86,7 +95,7 @@ class TaskController:
     def task_update_with_id(self, id, argv = dict()):
         if self.is_logged():
             id = self.get_int_id(id)
-            ret_time = self.check_format_datetime(argv)
+            ret_time = self.check_format_datetime(argv, False)
             ret_stat = self.check_status_value(argv['status'])
             if id == None or len(argv) == 0 or ret_stat == None or ret_time == None:
                 print("task_update_with_id : ERR argument value")
