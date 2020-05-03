@@ -5,12 +5,14 @@ The goal is to create a REST API with the framework Flask in Python.
 
 ![Subject](/github/subject.png)
 
-Diagram:
+# Diagram:
+
 ![Subject](/github/diagram.png)
 
 ![Subject](/github/routes.png)
 
-Bonus : Web app
+# Bonus : Web app
+
 ![Subject](/github/login.png)
 
 ![Subject](/github/signout.png)
